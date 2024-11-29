@@ -10,6 +10,12 @@ import { CopyIcon, RefreshCwIcon, SendIcon, DownloadIcon, WalletIcon } from 'luc
 import { Dialog, DialogTrigger, DialogContent, DialogHeader, DialogTitle, DialogDescription } from '@/components/ui/dialog'
 import { QRCodeSVG } from 'qrcode.react'
 
+declare global {
+  interface Window {
+    ethereum?: ethers.Eip1193Provider;
+  }
+}
+
 const SYNC_INTERVAL = 10000 // 10 seconds
 
 export default function DaVinciWallet() {
@@ -55,7 +61,7 @@ export default function DaVinciWallet() {
       } else {
         console.log("Error", "MetaMask is not installed")
       }
-    } catch (error: any) {
+    } catch (error: unknown) {
       console.log("Error", "Failed to connect wallet", error)
     }
   }
@@ -79,7 +85,7 @@ export default function DaVinciWallet() {
       await tx.wait()
       console.log("Success", `Sent ${amount} DCOIN to ${recipient}`)
       updateBalance(await connectedWallet.getAddress())
-    } catch (error: any) {
+    } catch (error: unknown) {
       console.log("Error", "Failed to send tokens", error)
     }
   }
@@ -90,7 +96,7 @@ export default function DaVinciWallet() {
       const blockNumber = await provider.getBlockNumber()
       setLatestBlock(blockNumber)
       setIsSyncing(false)
-    } catch (error: any) {
+    } catch (error: unknown) {
       console.error("Failed to fetch latest block:", error)
       setIsSyncing(false)
     }
