@@ -6,9 +6,10 @@ import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardHeader, CardTitle, CardDescription, CardFooter } from '@/components/ui/card'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
-import { CopyIcon, RefreshCwIcon, SendIcon, DownloadIcon, WalletIcon } from 'lucide-react'
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog'
+import { CopyIcon, RefreshCwIcon, SendIcon, DownloadIcon, WalletIcon, HelpCircleIcon } from 'lucide-react'
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger, DialogDescription } from '@/components/ui/dialog'
 import { QRCodeSVG } from 'qrcode.react'
+import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '@/components/ui/accordion'
 
 
 declare global {
@@ -119,10 +120,66 @@ export default function DaVinciWallet() {
       <Card className="w-full max-w-2xl mx-auto">
         <div className="flex justify-between items-center p-4">
           <CardTitle className="text-2xl font-bold">DaVinci Wallet</CardTitle>
+          <div className="flex space-x-2">
+          <Dialog>
+              <DialogTrigger asChild>
+                <Button variant="outline">
+                  <HelpCircleIcon className="mr-2 h-4 w-4" />
+                  Help
+                </Button>
+              </DialogTrigger>
+              <DialogContent className="sm:max-w-[425px]">
+                <DialogHeader>
+                  <DialogTitle>DaVinci Wallet Help</DialogTitle>
+                  <DialogDescription>
+                    Get answers to common questions about using your DaVinci wallet.
+                  </DialogDescription>
+                </DialogHeader>
+                <Accordion type="single" collapsible className="w-full">
+                  <AccordionItem value="item-1">
+                    <AccordionTrigger>How do I generate a new address?</AccordionTrigger>
+                    <AccordionContent>
+                      Click the Generate New Wallet button to create a new DaVinci wallet. This will provide you with a new address, mnemonic phrase, and private key.
+                    </AccordionContent>
+                  </AccordionItem>
+                  <AccordionItem value="item-2">
+                    <AccordionTrigger>How do I import a private key?</AccordionTrigger>
+                    <AccordionContent>
+                      Currently, this wallet doesnt support direct private key import. For security reasons, its recommended to use the generated wallet or connect an existing one through MetaMask.
+                    </AccordionContent>
+                  </AccordionItem>
+                  <AccordionItem value="item-3">
+                    <AccordionTrigger>How do I send tokens?</AccordionTrigger>
+                    <AccordionContent>
+                      1. Click the Send Token button.
+                      2. Enter the recipients address and the amount of DCOIN you want to send.
+                      3. Confirm the transaction details and click Send.
+                      Always double-check the recipient address before sending!
+                    </AccordionContent>
+                  </AccordionItem>
+                  <AccordionItem value="item-4">
+                    <AccordionTrigger>How do I receive tokens?</AccordionTrigger>
+                    <AccordionContent>
+                      1. Click the Receive Token button.
+                      2. Youll see a QR code and your wallet address.
+                      3. Share this address with the sender.
+                      They can then send DCOIN to this address, and it will appear in your wallet balance.
+                    </AccordionContent>
+                  </AccordionItem>
+                  <AccordionItem value="item-5">
+                    <AccordionTrigger>What is a mnemonic phrase?</AccordionTrigger>
+                    <AccordionContent>
+                      A mnemonic phrase is a series of words that can be used to recover your wallet. Keep it secret and safe! Never share it with anyone, as it provides full access to your wallet.
+                    </AccordionContent>
+                  </AccordionItem>
+                </Accordion>
+              </DialogContent>
+            </Dialog>
           <Button onClick={connectWallet} variant="outline" className="ml-auto">
             <WalletIcon className="mr-2 h-4 w-4" />
             Connect Wallet
           </Button>
+        </div>
         </div>
         <CardHeader>
           <CardDescription>Generate, connect, and manage your DaVinci wallet</CardDescription>
