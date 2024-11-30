@@ -7,8 +7,9 @@ import { Card, CardContent, CardHeader, CardTitle, CardDescription, CardFooter }
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { CopyIcon, RefreshCwIcon, SendIcon, DownloadIcon, WalletIcon } from 'lucide-react'
-import { Dialog, DialogTrigger, DialogContent, DialogHeader, DialogTitle, DialogDescription } from '@/components/ui/dialog'
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog'
 import { QRCodeSVG } from 'qrcode.react'
+
 
 declare global {
   interface Window {
@@ -28,7 +29,6 @@ export default function DaVinciWallet() {
   const [balance, setBalance] = useState<string>('0')
   const [recipient, setRecipient] = useState('')
   const [amount, setAmount] = useState('')
-  const [showQR, setShowQR] = useState(false)
   const [latestBlock, setLatestBlock] = useState<number | null>(null)
   const [isSyncing, setIsSyncing] = useState(false)
 
@@ -96,7 +96,7 @@ export default function DaVinciWallet() {
       const blockNumber = await provider.getBlockNumber()
       setLatestBlock(blockNumber)
       setIsSyncing(false)
-    } catch (error: unknown) {
+    } catch (error) {
       console.error("Failed to fetch latest block:", error)
       setIsSyncing(false)
     }
@@ -185,7 +185,6 @@ export default function DaVinciWallet() {
               <DialogContent>
                 <DialogHeader>
                   <DialogTitle>Send DCOIN</DialogTitle>
-                  <DialogDescription>Enter the recipient address and amount to send DCOIN.</DialogDescription>
                 </DialogHeader>
                 <div className="space-y-4 py-4">
                   <div className="space-y-2">
@@ -200,27 +199,27 @@ export default function DaVinciWallet() {
                 </div>
               </DialogContent>
             </Dialog>
-            <div className="flex-1 flex flex-col items-center">
-              <Button 
-                className="w-full mb-2" 
-                onClick={() => {
-                  if (connectedWallet) {
-                    setShowQR(!showQR);
-                  } else {
-                    console.log("Please connect your wallet first");
-                  }
-                }}
-              >
-                <DownloadIcon className="mr-2 h-4 w-4" />
-                {showQR ? 'Hide' : 'Show'} Receive QR
-              </Button>
-              {showQR && connectedWallet && (
-                <div className="mt-2 p-2 bg-white rounded-lg flex flex-col items-center justify-center w-full">
-                  <QRCodeSVG value={connectedWallet.address} size={128} />
-                  <p className="mt-2 text-xs text-center overflow-hidden text-ellipsis w-full" style={{ whiteSpace: 'nowrap' }}>{connectedWallet.address}</p>
+            <Dialog>
+              <DialogTrigger asChild>
+                <Button className="flex-1">
+                  <DownloadIcon className="mr-2 h-4 w-4" />
+                  Receive Token
+                </Button>
+              </DialogTrigger>
+              <DialogContent className="sm:max-w-md">
+                <div className="flex flex-col items-center justify-center p-6">
+                  {connectedWallet && (
+                    <>
+                      <QRCodeSVG value={connectedWallet.address} size={200} />
+                      <p className="mt-4 text-xs text-center break-all">{connectedWallet.address}</p>
+                    </>
+                  )}
+                  {!connectedWallet && (
+                    <p className="text-center">Please connect your wallet to see the receive address.</p>
+                  )}
                 </div>
-              )}
-            </div>
+              </DialogContent>
+            </Dialog>
           </div>
           {connectedWallet && (
             <div className="mt-4 text-center">
